@@ -1,0 +1,10 @@
+# Install a PyTorch/torchvision pair suitable for your platform first.
+numpy
+opencv-python
+scipy
+scikit-image
+PyYAML
+lmdb
+einops
+tqdm
+tensorboard

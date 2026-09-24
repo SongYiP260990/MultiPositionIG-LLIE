@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/
+checkpoints/
+experiments/
+results/
+tb_logger/
+logs/
+*.pth
+*.pt
+*.ckpt
+*.log
+.DS_Store
