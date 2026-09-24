@@ -16,6 +16,14 @@ The author plans to provide the following three weights through Baidu Netdisk an
 
 These three files were checked for strict parameter loading with the released model class on CPU. That check establishes model compatibility; it does not independently reproduce the paper's test-set scores. Weights for other datasets are outside this initial release.
 
+Expected SHA-256 hashes for the local files verified during release preparation (compare them after downloading):
+
+```text
+LOL-v1          DCEFB7062190C2CA987C337FE42ECBFA7E1274C11996B58D883D8BFD641EED41
+LOL-v2-real     CB3092F2BC559B6A1DFD2B12142BB3FF74AC60E1667DF46941E6005926ACB249
+LOL-v2-synthetic 999C679BEBC6DACC073BFBC26B41A638CB74BD64F48F4017CB739E1C814D1C88
+```
+
 ## Environment
 
 Use Python 3.9 or a compatible version. Install a matching PyTorch and torchvision build for your machine, then install the remaining packages:
