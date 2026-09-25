@@ -6,7 +6,7 @@ The implementation is based on the [official RetinexFormer repository](https://g
 
 ## 1. Environment
 
-Use Python 3.9 or a compatible version. Install a PyTorch and torchvision pair suitable for your platform, then install the remaining dependencies:
+The tested CPU environment uses Python 3.9, PyTorch 2.5.1, and torchvision 0.20.1. Install the matching PyTorch pair for your platform, then install the remaining dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -38,7 +38,15 @@ The low-light and normal-light directories must contain matching image filenames
 
 ## 3. Testing
 
-Pretrained models will be available from **Baidu Disk** and **Google Drive**; the download links will be added here when the archives are uploaded. Put the downloaded weights in `checkpoints/`, then set `path.pretrain_network_g` in the corresponding `*_test.yml` to the actual filename. The current `REPLACE_WITH_...` values are placeholders.
+Checkpoint download links are pending. The testing commands below require the corresponding weight file in `checkpoints/`; they cannot run until the weights are obtained. The test options already name the three intended files:
+
+| Dataset | Expected file | Architecture | Paper-result status |
+| --- | --- | --- | --- |
+| LOL-v1 | `best_psnr_25.17_1000.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint; benchmark score has not been re-evaluated in this release check |
+| LOL-v2-real | `best_psnr_23.67_22600.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint used in the revision gate analysis; benchmark score has not been re-evaluated in this release check |
+| LOL-v2-synthetic | `best_psnr_26.38_205500.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint; benchmark score has not been re-evaluated in this release check |
+
+These files are not stored in Git. Download locations will be added after the archives are uploaded and access is verified. SMID and LOL-Blur weights are withheld pending provenance checks. The SDSD-Indoor organized weight uses a different checkpoint-compatible architecture from the current release training option, so it is also withheld.
 
 Run these commands from the repository root:
 
