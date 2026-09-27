@@ -1,4 +1,3 @@
-# Archived LOL-Blur paper-run settings with public dataset paths.
 name: MultiPositionIG_LOLBlur
 model_type: ImageCleanModel
 use_amp: False
