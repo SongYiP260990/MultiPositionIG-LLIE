@@ -56,7 +56,7 @@ Six checkpoints are available from [Google Drive](https://drive.google.com/drive
 | SDSD-Indoor | `SDSD-indoor.pth` |
 | LOL-Blur | `LOL-Blur.pth` |
 
-Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames. Hashes are in [WEIGHTS_SHA256.txt](WEIGHTS_SHA256.txt). The Google Drive copies were downloaded and matched the verified local weights by SHA-256; the Baidu share was checked for filenames and sizes, but its file bytes were not independently hashed.
+Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames. Hashes are in [WEIGHTS_SHA256.txt](WEIGHTS_SHA256.txt). 
 
 RetinexFormer uses one option per dataset for training and passes a checkpoint separately for testing. This repository follows the same convention. Run these commands from the repository root:
 
