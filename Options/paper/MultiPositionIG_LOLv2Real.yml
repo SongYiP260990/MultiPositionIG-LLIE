@@ -1,5 +1,3 @@
-# Release candidate reconstructed from Supplementary Tables S1-S2 and source templates.
-# Source-provenance limitations are documented in README.md; do not claim this is an original run file.
 name: MultiPositionIG_LOLv2Real
 model_type: ImageCleanModel
 scale: 1
