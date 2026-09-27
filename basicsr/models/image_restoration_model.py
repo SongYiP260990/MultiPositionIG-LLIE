@@ -120,10 +120,19 @@ class ImageCleanModel(BaseModel):
 
         # define losses
         if train_opt.get('pixel_opt'):
-            pixel_type = train_opt['pixel_opt'].pop('type')
-            cri_pix_cls = getattr(loss_module, pixel_type)  #根据pop出来的loss_type找到对应的loss函数
-            self.cri_pix = cri_pix_cls(**train_opt['pixel_opt']).to(
-                self.device)      #如何写 weighted loss 呢？传参构造Loss函数
+            pixel_cfg = train_opt['pixel_opt']
+            if isinstance(pixel_cfg, list):
+                self.cri_pix = []
+                for loss_conf in pixel_cfg:
+                    loss_conf = dict(loss_conf)
+                    pixel_type = loss_conf.pop('type')
+                    cri_pix_cls = getattr(loss_module, pixel_type)
+                    self.cri_pix.append(cri_pix_cls(**loss_conf).to(self.device))
+            else:
+                pixel_cfg = dict(pixel_cfg)
+                pixel_type = pixel_cfg.pop('type')
+                cri_pix_cls = getattr(loss_module, pixel_type)
+                self.cri_pix = cri_pix_cls(**pixel_cfg).to(self.device)
         else:
             raise ValueError('pixel loss are None.')
 
@@ -194,7 +203,11 @@ class ImageCleanModel(BaseModel):
             # pixel loss
             l_pix = 0.
             for pred in preds:
-                l_pix += self.cri_pix(pred, self.gt) #此处统计batch的loss
+                if isinstance(self.cri_pix, list):
+                    for cri in self.cri_pix:
+                        l_pix += cri(pred, self.gt)
+                else:
+                    l_pix += self.cri_pix(pred, self.gt)
 
             loss_dict['l_pix'] = l_pix
 
@@ -303,13 +316,19 @@ class ImageCleanModel(BaseModel):
                                                 img_name,
                                                 f'{img_name}_{current_iter}_gt.png')
                 else:
-
+                    # Keep scene directories so video frames with the same basename
+                    # do not overwrite one another in the released test outputs.
+                    lq_root = dataloader.dataset.opt['dataroot_lq']
+                    relative_stem = osp.splitext(
+                        osp.relpath(val_data['lq_path'][0], lq_root))[0]
+                    if relative_stem.startswith('..') or osp.isabs(relative_stem):
+                        raise ValueError(f'Input path is outside dataroot_lq: {val_data["lq_path"][0]}')
                     save_img_path = osp.join(
                         self.opt['path']['visualization'], dataset_name,
-                        f'{img_name}.png')
+                        f'{relative_stem}.png')
                     save_gt_img_path = osp.join(
                         self.opt['path']['visualization'], dataset_name,
-                        f'{img_name}_gt.png')
+                        f'{relative_stem}_gt.png')
 
                 imwrite(sr_img, save_img_path)
                 imwrite(gt_img, save_gt_img_path)

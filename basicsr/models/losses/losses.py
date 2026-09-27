@@ -271,6 +271,18 @@ class _SSIMLoss(nn.Module):
         return 1.0 - ssim_map.mean()
 
 
+class SSIMLoss(nn.Module):
+    """The separate 1-SSIM objective used alongside L1 for LOL-Blur."""
+
+    def __init__(self, loss_weight=1.0, window_size=11, **kwargs):
+        super().__init__()
+        self.loss_weight = loss_weight
+        self.ssim_loss = _SSIMLoss(window_size=window_size)
+
+    def forward(self, pred, target, weight=None, **kwargs):
+        return self.loss_weight * self.ssim_loss(pred, target)
+
+
 # =========================================================
 #  2. FFT Loss — 频域约束 (幅度 + 相位)
 # =========================================================

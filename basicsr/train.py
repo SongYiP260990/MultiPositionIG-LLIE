@@ -35,8 +35,37 @@ def parse_options(is_train=True):
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    if not is_train:
+        parser.add_argument(
+            '--weights', type=str, required=True,
+            help='Checkpoint to load when evaluating the validation split from a training option.')
+        parser.add_argument('--cpu', action='store_true',
+                            help='Run checkpoint evaluation on CPU.')
     args = parser.parse_args()
     opt = parse(args.opt, is_train=is_train)
+
+    if not is_train:
+        weights = osp.expanduser(args.weights)
+        if not osp.isfile(weights):
+            parser.error(f'Checkpoint does not exist: {weights}')
+        if 'val' not in opt['datasets']:
+            parser.error('Testing requires a val dataset in the option file.')
+        opt['path']['pretrain_network_g'] = weights
+        test_dataset = opt['datasets']['val']
+        test_dataset['phase'] = 'test'
+        opt['datasets'] = {'test': test_dataset}
+        opt['val']['save_img'] = True
+        if args.cpu:
+            opt['num_gpu'] = 0
+        if 'ssim' not in opt['val']['metrics']:
+            opt['val']['metrics'] = {
+                'ssim': {
+                    'type': 'calculate_ssim',
+                    'crop_border': 0,
+                    'test_y_channel': False
+                },
+                **opt['val']['metrics']
+            }
 
     # distributed settings
     if args.launcher == 'none':

@@ -1,0 +1,126 @@
+# Archived SDSD-Indoor stage-1 training settings with public dataset paths.
+# The released 30.56 checkpoint was subsequently fine-tuned in stage 2.
+name: MultiPositionIG_SDSDIndoor
+model_type: ImageCleanModel
+scale: 1
+num_gpu: 1
+manual_seed: 100
+
+datasets:
+  train:
+    name: TrainSet
+    type: Dataset_SDSDImage
+    random_reverse: false
+    border_mode: false
+    dataroot_gt: data/SDSD/indoor_static_np/GT
+    dataroot_lq: data/SDSD/indoor_static_np/input
+    train_size: [960, 512]
+    cache_keys: ~
+    cache_data: true
+    padding: new_info
+    testing_dir: pair11,pair21,pair1,pair19,pair4,pair9
+
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+    N_frames: 5
+    use_flip: true
+    use_rot: true
+    color: RGB
+
+    use_shuffle: true
+    num_worker_per_gpu: 4
+    batch_size_per_gpu: 4
+
+    mini_batch_sizes: [8]
+    iters: [50000]
+    gt_size: 128
+    gt_sizes: [128]
+
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+
+  val:
+    name: ValSet
+    type: Dataset_SDSDImage
+    dataroot_gt: data/SDSD/indoor_static_np/GT
+    dataroot_lq: data/SDSD/indoor_static_np/input
+    cache_data: true
+    N_frames: 5
+    padding: new_info
+    train_size: [960, 512]
+    testing_dir: pair11,pair21,pair1,pair19,pair4,pair9
+    io_backend:
+      type: disk
+
+network_g:
+  type: MultiPositionIlluminationGuidance
+  in_channels: 3
+  out_channels: 3
+  n_feat: 40
+  stage: 1
+  num_blocks: [1, 2, 2]
+
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+
+train:
+  total_iter: 50000
+  warmup_iter: -1
+  use_grad_clip: true
+
+  scheduler:
+    type: CosineAnnealingRestartCyclicLR
+    periods: [15000, 35000]
+    restart_weights: [1, 1]
+    eta_mins: [0.0003, 0.000001]
+
+  mixing_augs:
+    mixup: true
+    mixup_beta: 1.2
+    use_identity: true
+
+  optim_g:
+    type: Adam
+    lr: !!float 2e-4
+    betas: [0.9, 0.999]
+
+  pixel_opt:
+    type: L1ColorPSNRLoss
+    loss_weight: 1.0
+    color_weight: 0.1
+    psnr_weight: 0.01
+    toY: false
+
+val:
+  window_size: 4
+  val_freq: !!float 4e3
+  save_img: false
+  rgb2bgr: true
+  use_image: false
+  max_minibatch: 8
+
+  metrics:
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+    psnr:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+
+logger:
+  print_freq: 1000
+  save_checkpoint_freq: !!float 4e3
+  use_tb_logger: true
+  wandb:
+    project: low_light
+    resume_id: ~
+
+dist_params:
+  backend: nccl
+  port: 29500
