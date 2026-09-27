@@ -69,7 +69,7 @@ python -m basicsr.test --opt Options/paper/MultiPositionIG_SDSDIndoor.yml --weig
 python -m basicsr.test --opt Options/paper/MultiPositionIG_LOLBlur.yml --weights "checkpoints/LOL-Blur.pth"
 ```
 
-The test entry point selects only the option's `val` dataset, loads the supplied checkpoint, saves outputs under `results/`, and computes PSNR and SSIM against paired ground truth. It never evaluates the option's `train` dataset. LPIPS and LOE are not computed by these commands. Full benchmark scores were not re-evaluated as part of this code-release check.
+The test entry point selects only the option's `val` dataset, loads the supplied checkpoint, saves outputs under `results/`, and computes the PSNR and SSIM metrics listed in all six options against paired ground truth. It never evaluates the option's `train` dataset. LPIPS and LOE are not computed by these commands. Full benchmark scores were not re-evaluated as part of this code-release check.
 
 ## 4. Training
 
@@ -84,6 +84,7 @@ python -m basicsr.train --opt Options/paper/MultiPositionIG_SDSDIndoor.yml
 python -m basicsr.train --opt Options/paper/MultiPositionIG_LOLBlur.yml
 ```
 
+SSIM reporting was added to the public SMID and LOL-Blur options so testing prints both manuscript metrics. The archived runs selected checkpoints by PSNR; the training entry point explicitly uses PSNR for selection regardless of metric order. The SDSD-Indoor option covers stage 1 only; the released SDSD-Indoor checkpoint includes later stage-2 training.
 
 ## Acknowledgment
 

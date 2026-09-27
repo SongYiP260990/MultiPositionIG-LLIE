@@ -354,16 +354,19 @@ def main():
                 rgb2bgr = opt['val'].get('rgb2bgr', True)
                 # wheather use uint8 image to compute metrics
                 use_image = opt['val'].get('use_image', True)
-                current_metric = model.validation(val_loader, current_iter, tb_logger,
-                                                  opt['val']['save_img'], rgb2bgr, use_image)
+                model.validation(val_loader, current_iter, tb_logger,
+                                 opt['val']['save_img'], rgb2bgr, use_image)
+                current_metrics = model.metric_results
+                current_psnr = current_metrics['psnr']
                 # log cur metric to csv file
                 logger_metric = get_root_logger(logger_name='metric')
-                metric_str = f'{current_iter},{current_metric}'
+                metric_str = f'{current_iter},' + ','.join(
+                    str(current_metrics[k]) for k in opt['val']['metrics'])
                 logger_metric.info(metric_str)
 
                 # log best metric
-                if best_metric['psnr'] < current_metric:
-                    best_metric['psnr'] = current_metric
+                if best_metric['psnr'] < current_psnr:
+                    best_metric.update(current_metrics)
                     # save best model
                     best_metric['iter'] = current_iter
                     model.save_best(best_metric)
