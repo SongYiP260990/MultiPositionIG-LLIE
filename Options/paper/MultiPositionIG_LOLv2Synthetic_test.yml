@@ -1,4 +1,4 @@
-# Test-only candidate. Replace checkpoint path after verifying the released weight.
+# Place the verified shared LOL v2-syn.pth file in checkpoints/ before testing.
 # Never run a training YAML with basicsr/test.py: it iterates every dataset entry.
 name: MultiPositionIG_LOLv2Synthetic_test
 model_type: ImageCleanModel
@@ -26,7 +26,7 @@ network_g:
   - 2
   - 2
 path:
-  pretrain_network_g: checkpoints/best_psnr_26.38_205500.pth
+  pretrain_network_g: checkpoints/LOL v2-syn.pth
   strict_load_g: true
   param_key: params
 train:

@@ -38,15 +38,20 @@ The low-light and normal-light directories must contain matching image filenames
 
 ## 3. Testing
 
-Checkpoint download links are pending. The testing commands below require the corresponding weight file in `checkpoints/`; they cannot run until the weights are obtained. The test options already name the three intended files:
+Six checkpoints are available from [Google Drive](https://drive.google.com/drive/folders/1mpr5IR6m-t-1nhXdo1KB72eKEh4DG2Tj?usp=sharing) or [Baidu Netdisk](https://pan.baidu.com/s/1Do676ZPTTMF8IJAdbMwDQw?pwd=wuet) (extraction code `wuet`). The Google Drive copies were downloaded and their SHA-256 hashes matched the verified local weights. The Baidu share was opened with the extraction code; its six filenames and sizes matched, but its file bytes were not independently hashed. The weights are not stored in Git.
 
-| Dataset | Expected file | Architecture | Paper-result status |
-| --- | --- | --- | --- |
-| LOL-v1 | `best_psnr_25.17_1000.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint; benchmark score has not been re-evaluated in this release check |
-| LOL-v2-real | `best_psnr_23.67_22600.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint used in the revision gate analysis; benchmark score has not been re-evaluated in this release check |
-| LOL-v2-synthetic | `best_psnr_26.38_205500.pth` | 40 channels, `[1,2,2]` blocks | Selected checkpoint; benchmark score has not been re-evaluated in this release check |
+Place the downloaded `.pth` files directly in `checkpoints/` at the repository root, retaining the archive filenames. Verify them against [WEIGHTS_SHA256.txt](WEIGHTS_SHA256.txt) before use.
 
-These files are not stored in Git. Download locations will be added after the archives are uploaded and access is verified. SMID and LOL-Blur weights are withheld pending provenance checks. The SDSD-Indoor organized weight uses a different checkpoint-compatible architecture from the current release training option, so it is also withheld.
+| Dataset | Archive filename | Release scope |
+| --- | --- | --- |
+| LOL-v1 | `LOL v1.pth` | Strict loading and small-image inference verified; full benchmark score not re-evaluated for this release |
+| LOL-v2-real | `LOL v2-real.pth` | Strict loading and small-image inference verified; this exact weight was used for the revision gate analysis; full benchmark score not re-evaluated for this release |
+| LOL-v2-synthetic | `LOL v2-syn.pth` | Strict loading and small-image inference verified; full benchmark score not re-evaluated for this release |
+| SMID | `SMID.pth` | Paper checkpoint identified by training and evaluation records; dataset-specific test option not included here |
+| SDSD-Indoor | `SDSD-indoor.pth` | Two-stage Table 4 checkpoint identified by training and evaluation records; the separate component ablation uses different runs; dataset-specific test option not included here |
+| LOL-Blur | `LOL-Blur.pth` | Paper checkpoint identified by training and evaluation records; dataset-specific test option not included here |
+
+All six weights have the same 40-channel, one-stage, `[1,2,2]`-block model graph. The commands below cover the three LOL datasets for which this repository includes dataset-specific options; the other released weights are provided for inspection and future dataset-specific evaluation, not as a claim that this repository contains a ready-to-run benchmark pipeline for those datasets.
 
 Run these commands from the repository root:
 
@@ -61,7 +66,7 @@ python -m basicsr.test --opt Options/paper/MultiPositionIG_LOLv2Real_test.yml
 python -m basicsr.test --opt Options/paper/MultiPositionIG_LOLv2Synthetic_test.yml
 ```
 
-The test commands load the selected checkpoint strictly, save enhanced images under `results/`, and compute PSNR and SSIM against paired ground truth. LPIPS and LOE are not computed by these commands. The three intended weights passed a CPU loading and single-image inference check with this code; full-dataset paper scores were not re-evaluated as part of this release check.
+The test commands load the corresponding shared checkpoint strictly, save enhanced images under `results/`, and compute PSNR and SSIM against paired ground truth. LPIPS and LOE are not computed by these commands. The three LOL weights passed a CPU loading and single-image inference check with this code; full-dataset paper scores were not re-evaluated as part of this release check.
 
 ## 4. Training
 
