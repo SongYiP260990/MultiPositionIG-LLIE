@@ -1,6 +1,3 @@
-# Release candidate reconstructed from Supplementary Tables S1-S2 and source templates.
-# LOL-v1 patch/batch/budget/LR/loss/MixUp follow the author's 2026-09-24 instruction.
-# This is not established as the original training option for best_psnr_25.17_1000.pth.
 name: MultiPositionIG_LOLv1
 model_type: ImageCleanModel
 scale: 1
