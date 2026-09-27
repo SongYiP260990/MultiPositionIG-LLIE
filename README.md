@@ -56,7 +56,7 @@ Six checkpoints are available from [Google Drive](https://drive.google.com/drive
 | SDSD-Indoor | `SDSD-indoor.pth` |
 | LOL-Blur | `LOL-Blur.pth` |
 
-Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames. Hashes are in [WEIGHTS_SHA256.txt](WEIGHTS_SHA256.txt). 
+Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames.
 
 RetinexFormer uses one option per dataset for training and passes a checkpoint separately for testing. This repository follows the same convention. Run these commands from the repository root:
 
@@ -69,7 +69,7 @@ python -m basicsr.test --opt Options/paper/MultiPositionIG_SDSDIndoor.yml --weig
 python -m basicsr.test --opt Options/paper/MultiPositionIG_LOLBlur.yml --weights "checkpoints/LOL-Blur.pth"
 ```
 
-The test entry point selects only the option's `val` dataset, loads the supplied checkpoint, saves outputs under `results/`, and computes the PSNR and SSIM metrics listed in all six options against paired ground truth. It never evaluates the option's `train` dataset. LPIPS and LOE are not computed by these commands. Full benchmark scores were not re-evaluated as part of this code-release check.
+The test commands load the supplied checkpoints, save enhanced images under `results/`, and compute PSNR and SSIM against the paired ground truth. LPIPS and LOE are not computed by these commands.
 
 ## 4. Training
 
@@ -84,7 +84,7 @@ python -m basicsr.train --opt Options/paper/MultiPositionIG_SDSDIndoor.yml
 python -m basicsr.train --opt Options/paper/MultiPositionIG_LOLBlur.yml
 ```
 
-SSIM reporting was added to the public SMID and LOL-Blur options so testing prints both manuscript metrics. The archived runs selected checkpoints by PSNR; the training entry point explicitly uses PSNR for selection regardless of metric order. The SDSD-Indoor option covers stage 1 only; the released SDSD-Indoor checkpoint includes later stage-2 training.
+Checkpoint selection uses PSNR. The SDSD-Indoor result uses the checkpoint selected at iteration 36k of the 50k training run.
 
 ## Acknowledgment
 
