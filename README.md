@@ -84,9 +84,6 @@ python -m basicsr.train --opt Options/paper/MultiPositionIG_SDSDIndoor.yml
 python -m basicsr.train --opt Options/paper/MultiPositionIG_LOLBlur.yml
 ```
 
-The LOL training options were reconstructed from the Supplement and available source templates; they are not verified copies of the original LOL run files. The SMID, SDSD-Indoor, and LOL-Blur options follow the archived run settings, with portable dataset paths and the public model class name. The SDSD-Indoor option covers **stage 1 only**. The released `SDSD-indoor.pth` is the later stage-2 checkpoint, so running this stage-1 option alone does not reproduce that weight.
-
-SMID and SDSD-Indoor stage 1 have `batch_size_per_gpu: 4` in their archived run options. Their `mini_batch_sizes: [8]` setting does not increase the actual DataLoader batch in this implementation. Training periodically evaluates on the configured evaluation partition for PSNR-based checkpoint selection; those selected-checkpoint scores are not independently held-out estimates.
 
 ## Acknowledgment
 
