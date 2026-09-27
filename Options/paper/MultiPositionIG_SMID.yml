@@ -1,4 +1,3 @@
-# Archived SMID paper-run training settings with public dataset paths.
 name: MultiPositionIG_SMID
 model_type: ImageCleanModel
 scale: 1
