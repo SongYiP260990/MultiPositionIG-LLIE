@@ -23,7 +23,7 @@ Six checkpoints are available from [Google Drive](https://drive.google.com/drive
 | SDSD-Indoor | `SDSD-indoor.pth` | 30.01 / 0.891 |
 | LOL-Blur | `LOL-Blur.pth` | 27.52 / 0.911 |
 
-Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames. SHA-256 checksums are listed in [WEIGHTS_SHA256.txt](WEIGHTS_SHA256.txt).
+Place the `.pth` files under `checkpoints/` at the repository root, keeping these filenames. 
 
 ## Environment Setup
 
